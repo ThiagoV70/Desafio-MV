@@ -21,8 +21,6 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long
 
     List<Movimentacao> findByClienteIdAndDataHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fim);
 
-    // Dentro de com.xpto.financeiro.repository.MovimentacaoRepository
-
     @Query("SELECT new com.xpto.financeiro.dto.RelatorioReceitaXptoItemDTO(" +
             "m.cliente.nome, " +
             "COUNT(m.id), " +
