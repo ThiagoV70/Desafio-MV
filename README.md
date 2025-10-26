@@ -144,4 +144,8 @@ mvn spring-boot:run
 ```
 A API estará disponível em ```http://localhost:8080```.
 
+---
+## 🙏 Agradecimentos
+Gostaria de expressar meus sinceros agradecimentos à MV por ter proporcionado este desafio técnico. A oportunidade de participar desse processo foi extremamente enriquecedora, permitindo-me aprimorar meus conhecimentos e aplicar na prática conceitos importantes de desenvolvimento de software.
+
 
