@@ -1,5 +1,6 @@
 package com.xpto.financeiro.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.xpto.financeiro.model.enums.TipoMovimentacao;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,20 +15,28 @@ public class Movimentacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
-
-    // Simula a conta bancária de origem/destino [cite: 6]
-    private String contaBancariaId;
-
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoMovimentacao tipo;
 
+    @Column(nullable = false)
     private BigDecimal valor;
 
+    @Column(nullable = false, updatable = false)
     private LocalDateTime dataHora = LocalDateTime.now();
 
-    // Valor do cálculo da receita da XPTO referente a esta operação [cite: 9]
-    private BigDecimal valorTaxaXpto;
+    @Column(nullable = false)
+    private BigDecimal valorTaxaXpto = BigDecimal.ZERO;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @JsonBackReference("cliente-movimentacao")
+    private Cliente cliente;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conta_bancaria_id", nullable = false)
+    @JsonBackReference("conta-movimentacao")
+    private ContaBancaria contaBancaria;
 }
