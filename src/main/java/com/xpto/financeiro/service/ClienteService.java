@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -136,5 +139,52 @@ public class ClienteService {
     public Cliente buscarClientePorId(Long clienteId) {
         return clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + clienteId));
+    }
+
+    public RelatorioSaldoClienteDTO getRelatorioSaldoCliente(Long clienteId, LocalDate inicio, LocalDate fim) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado: " + clienteId));
+
+        Endereco endereco = enderecoRepository.findByClienteId(clienteId)
+                .stream()
+                .findFirst()
+                .orElse(new Endereco());
+
+        LocalDateTime inicioDt = inicio.atStartOfDay();
+        LocalDateTime fimDt = fim.atTime(LocalTime.MAX);
+        List<Movimentacao> movimentacoes =
+                movimentacaoRepository.findByClienteIdAndDataHoraBetween(clienteId, inicioDt, fimDt);
+
+        long movCredito = 0;
+        long movDebito = 0;
+        BigDecimal saldoInicialPeriodo = BigDecimal.ZERO;
+        BigDecimal totalCredito = BigDecimal.ZERO;
+        BigDecimal totalDebito = BigDecimal.ZERO;
+        BigDecimal totalTaxasPagas = BigDecimal.ZERO;
+
+        for (Movimentacao mov : movimentacoes) {
+            totalTaxasPagas = totalTaxasPagas.add(mov.getValorTaxaXpto());
+            if (mov.getTipo() == TipoMovimentacao.CREDITO) {
+                movCredito++;
+                totalCredito = totalCredito.add(mov.getValor());
+            } else {
+                movDebito++;
+                totalDebito = totalDebito.add(mov.getValor());
+            }
+        }
+
+        BigDecimal saldoAtual = clienteRepository.getSaldoAtualCliente(clienteId);
+
+        RelatorioSaldoClienteDTO relatorio = new RelatorioSaldoClienteDTO();
+        relatorio.setClienteNome(cliente.getNome());
+
+        relatorio.setMovimentacoesCredito(movCredito);
+        relatorio.setMovimentacoesDebito(movDebito);
+        relatorio.setTotalMovimentacoes(movCredito + movDebito);
+        relatorio.setValorPagoMovimentacoes(totalTaxasPagas);
+        relatorio.setSaldoInicial(saldoInicialPeriodo);
+        relatorio.setSaldoAtual(saldoAtual);
+
+        return relatorio;
     }
 }
