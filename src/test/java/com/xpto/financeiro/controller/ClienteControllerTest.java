@@ -31,7 +31,7 @@ public class ClienteControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper; // Usado para converter o DTO em JSON
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -46,7 +46,9 @@ public class ClienteControllerTest {
 
     @Test
     void deveCriarClienteComMovimentacaoInicial() throws Exception {
+        //  (Teste do requisito de cadastro com movimentação inicial)
 
+        // Arrange
         ClienteRequestDTO request = new ClienteRequestDTO();
         request.setNome("Cliente Teste Integração");
         request.setDocumento("12345678900");
@@ -65,6 +67,7 @@ public class ClienteControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(request);
 
+        // Act & Assert
         mockMvc.perform(post("/api/clientes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
@@ -72,5 +75,6 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.nome").value("Cliente Teste Integração"));
 
+        // (Verificações adicionais no banco seriam feitas aqui)
     }
 }
