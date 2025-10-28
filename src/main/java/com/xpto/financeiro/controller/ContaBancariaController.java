@@ -17,6 +17,8 @@ public class ContaBancariaController {
     @Autowired
     private ContaBancariaService contaService;
 
+    // CRUD de Contas
+
     @PostMapping("/clientes/{clienteId}/contas")
     public ResponseEntity<ContaBancaria> adicionarConta(
             @PathVariable Long clienteId,
@@ -35,6 +37,7 @@ public class ContaBancariaController {
     public ResponseEntity<ContaBancaria> atualizarConta(
             @PathVariable Long contaId,
             @RequestBody ContaBancariaRequestDTO dto) {
+        // A lógica de negócio  está dentro do serviço
         ContaBancaria contaAtualizada = contaService.atualizarConta(contaId, dto);
         return ResponseEntity.ok(contaAtualizada);
     }

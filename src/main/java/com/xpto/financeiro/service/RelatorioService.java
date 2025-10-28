@@ -22,6 +22,10 @@ public class RelatorioService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
+    /**
+     * Gera o Relatório de Receita da Empresa (XPTO) por período.
+     *
+     */
     public RelatorioReceitaXptoDTO getRelatorioReceitaXpto(LocalDate inicio, LocalDate fim) {
 
         LocalDateTime inicioDt = inicio.atStartOfDay();
@@ -30,6 +34,7 @@ public class RelatorioService {
         List<RelatorioReceitaXptoItemDTO> itens =
                 movimentacaoRepository.getReceitaXptoPorPeriodoAgrupado(inicioDt, fimDt);
 
+        // Calcula o total
         BigDecimal total = itens.stream()
                 .map(RelatorioReceitaXptoItemDTO::getValorDasMovimentacoes)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -44,8 +49,14 @@ public class RelatorioService {
     }
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository; // (Adicionar este Autowired)
 
+    // (O método getRelatorioReceitaXpto que fizemos antes permanece)
+
+    /**
+     * Gera o Relatório de Saldo de Todos os Clientes.
+     * [cite: 55]
+     */
     public List<RelatorioSaldoGeralItemDTO> getRelatorioSaldoGeral() {
         List<Cliente> clientes = clienteRepository.findAll();
         List<RelatorioSaldoGeralItemDTO> relatorio = new ArrayList<>();
@@ -53,7 +64,7 @@ public class RelatorioService {
 
         for (Cliente cliente : clientes) {
             BigDecimal saldo = clienteRepository.getSaldoAtualCliente(cliente.getId());
-
+            // AQUI USAMOS A FUNÇÃO DO BANCO DE DADOS!
             relatorio.add(new RelatorioSaldoGeralItemDTO(
                     cliente.getNome(),
                     cliente.getDataCadastro(),

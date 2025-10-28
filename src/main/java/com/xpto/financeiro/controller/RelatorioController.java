@@ -18,11 +18,15 @@ import java.util.List;
 public class RelatorioController {
 
     @Autowired
-    private RelatorioService relatorioService;
+    private RelatorioService relatorioService; // (Usado para o relatório por período)
 
     @Autowired
     private ClienteService clienteService;
 
+    /**
+     * Relatório de receita da empresa (XPTO) por período.
+     *
+     */
     @GetMapping("/receita-xpto")
     public ResponseEntity<RelatorioReceitaXptoDTO> getReceitaXpto(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
@@ -31,6 +35,10 @@ public class RelatorioController {
         return ResponseEntity.ok(relatorioService.getRelatorioReceitaXpto(inicio, fim));
     }
 
+    /**
+     * Relatório de saldo do cliente X e período.
+     *
+     */
     @GetMapping("/saldo/clientes/{clienteId}/periodo")
     public ResponseEntity<RelatorioSaldoClienteDTO> getSaldoClientePorPeriodo(
             @PathVariable Long clienteId,
@@ -40,6 +48,10 @@ public class RelatorioController {
         return ResponseEntity.ok(clienteService.getRelatorioSaldoCliente(clienteId, inicio, fim));
     }
 
+    /**
+     * Relatório de saldo de todos os clientes.
+     * [cite: 55]
+     */
     @GetMapping("/saldo/clientes/todos")
     public ResponseEntity<List<RelatorioSaldoGeralItemDTO>> getSaldoGeral() {
         return ResponseEntity.ok(relatorioService.getRelatorioSaldoGeral());

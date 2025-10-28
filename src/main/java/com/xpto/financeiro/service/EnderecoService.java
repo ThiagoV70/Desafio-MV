@@ -32,7 +32,7 @@ public class EnderecoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + clienteId));
 
         Endereco endereco = new Endereco();
-
+        // Mapeamento (Idealmente usar MapStruct ou ModelMapper)
         endereco.setRua(dto.getRua());
         endereco.setNumero(dto.getNumero());
         endereco.setBairro(dto.getBairro());
@@ -41,7 +41,7 @@ public class EnderecoService {
         endereco.setCep(dto.getCep());
         endereco.setComplemento(dto.getComplemento());
 
-        endereco.setCliente(cliente);
+        endereco.setCliente(cliente); // Seta a associação
 
         return enderecoRepository.save(endereco);
     }
@@ -50,8 +50,10 @@ public class EnderecoService {
         Endereco endereco = enderecoRepository.findById(enderecoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com id: " + enderecoId));
 
+        // Mapeamento
         endereco.setRua(dto.getRua());
         endereco.setNumero(dto.getNumero());
+        // ... (mapear todos os campos)
 
         return enderecoRepository.save(endereco);
     }

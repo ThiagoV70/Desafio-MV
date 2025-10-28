@@ -17,7 +17,7 @@ public class Movimentacao {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoMovimentacao tipo;
+    private TipoMovimentacao tipo; // CREDITO ou DEBITO
 
     @Column(nullable = false)
     private BigDecimal valor;
@@ -25,16 +25,20 @@ public class Movimentacao {
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataHora = LocalDateTime.now();
 
+    /**
+     * Campo para armazenar o valor da taxa (receita) da XPTO
+     * cobrada por esta movimentação específica.
+     */
     @Column(nullable = false)
     private BigDecimal valorTaxaXpto = BigDecimal.ZERO;
 
-
+    // Relacionamento: Muitas movimentações pertencem a um Cliente
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     @JsonBackReference("cliente-movimentacao")
     private Cliente cliente;
 
-
+    // Relacionamento: Muitas movimentações são feitas por uma Conta
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conta_bancaria_id", nullable = false)
     @JsonBackReference("conta-movimentacao")

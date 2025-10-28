@@ -16,6 +16,7 @@ public class ContaBancaria {
     private String agencia;
     private String numeroConta;
 
+    // DTO usado para criar ou atualizar um endereço
     private boolean ativo = true;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ContaBancariaRepository extends JpaRepository<ContaBancaria, Long> {
+    // Busca apenas contas ativas
     List<ContaBancaria> findByClienteIdAndAtivoTrue(Long clienteId);
 }

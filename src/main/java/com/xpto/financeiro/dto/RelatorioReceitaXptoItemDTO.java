@@ -13,5 +13,5 @@ public class RelatorioReceitaXptoItemDTO {
 
     private String nomeCliente;
     private long quantidadeMovimentacoes;
-    private BigDecimal valorDasMovimentacoes;
+    private BigDecimal valorDasMovimentacoes; // (Receita XPTO)
 }

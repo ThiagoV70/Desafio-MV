@@ -46,7 +46,11 @@ public class ContaBancariaService {
         return contaRepository.save(conta);
     }
 
+    /**
+     * REGRA: Caso exista alguma movimentação associada, não permitir alteração
+     */
     public ContaBancaria atualizarConta(Long contaId, ContaBancariaRequestDTO dto) {
+        // Verifica se existem movimentações
         boolean existeMovimentacao = movimentacaoRepository.existsByContaBancariaId(contaId);
 
         if (existeMovimentacao) {
@@ -64,6 +68,9 @@ public class ContaBancariaService {
         return contaRepository.save(conta);
     }
 
+    /**
+     * REGRA: Permitir apenas exclusão lógica
+     */
     public void deletarContaLogicamente(Long contaId) {
         ContaBancaria conta = contaRepository.findById(contaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada com id: " + contaId));

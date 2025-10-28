@@ -24,21 +24,24 @@ public class Cliente {
     private TipoPessoa tipoPessoa;
 
     @Column(nullable = false, unique = true)
-    private String documento;
+    private String documento; // CPF ou CNPJ
 
     private String telefone;
 
     @Column(nullable = false, updatable = false)
     private LocalDate dataCadastro = LocalDate.now();
 
+    // Relacionamento: Um cliente pode ter vários endereços
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference // Evita recursão infinita na serialização JSON
     private List<Endereco> enderecos = new ArrayList<>();
 
+    // Relacionamento: Um cliente pode ter várias contas
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<ContaBancaria> contas = new ArrayList<>();
 
+    // Helper methods para sincronizar os relacionamentos (Boa Prática)
     public void addEndereco(Endereco endereco) {
         enderecos.add(endereco);
         endereco.setCliente(this);

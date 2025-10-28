@@ -17,6 +17,7 @@ public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;
 
+    // CRUD de Endereços
 
     @PostMapping("/clientes/{clienteId}/enderecos")
     public ResponseEntity<Endereco> adicionarEndereco(

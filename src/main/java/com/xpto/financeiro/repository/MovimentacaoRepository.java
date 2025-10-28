@@ -13,14 +13,29 @@ import java.util.List;
 @Repository
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long> {
 
+    /**
+     * Verifica se existe alguma movimentação associada a uma conta bancária.
+     * Usado na regra de negócio para não permitir alteração de conta.
+     */
     boolean existsByContaBancariaId(Long contaBancariaId);
 
+    /**
+     * Conta o número de movimentações de um cliente dentro de um período específico.
+     * Usado para calcular a faixa da taxa XPTO.
+     */
     long countByClienteIdAndDataHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fim);
 
+    /**
+     * Busca todas as movimentações de um cliente (para o relatório de saldo total).
+     */
     List<Movimentacao> findByClienteId(Long clienteId);
 
+    /**
+     * Busca movimentações de um cliente dentro de um período (para o relatório por período).
+     */
     List<Movimentacao> findByClienteIdAndDataHoraBetween(Long clienteId, LocalDateTime inicio, LocalDateTime fim);
 
+    //Busca dados agrupados para o Relatório de Receita da XPTO.
     @Query("SELECT new com.xpto.financeiro.dto.RelatorioReceitaXptoItemDTO(" +
             "m.cliente.nome, " +
             "COUNT(m.id), " +

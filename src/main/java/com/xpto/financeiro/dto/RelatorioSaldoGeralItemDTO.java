@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RelatorioSaldoGeralItemDTO {
-
+    // Ex: Cliente: X - Cliente desde: DD/MM/YYYY- Saldo em DD/MM/YYYY: 0.000,00
     private String nomeCliente;
     private LocalDate clienteDesde;
     private LocalDate dataSaldo;

@@ -11,6 +11,11 @@ import java.math.BigDecimal;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
+    /**
+     * Chama a função nativa do MySQL 'FN_CALCULAR_SALDO_ATUAL_CLIENTE'
+     * para cumprir o requisito de integração PL/SQL.
+     *
+     */
     @Query(value = "SELECT FN_CALCULAR_SALDO_ATUAL_CLIENTE(:clienteId)", nativeQuery = true)
     BigDecimal getSaldoAtualCliente(@Param("clienteId") Long clienteId);
 }

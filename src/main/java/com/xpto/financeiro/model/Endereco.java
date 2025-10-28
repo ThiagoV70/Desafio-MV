@@ -17,7 +17,7 @@ public class Endereco {
     private String complemento;
     private String bairro;
     private String cidade;
-    private String uf;
+    private String uf; // (Ex: SP, RJ)
     private String cep;
 
     // Relacionamento: Muitos endereços pertencem a um Cliente
